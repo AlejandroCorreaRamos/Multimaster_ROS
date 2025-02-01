@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-1-g15f4949  Build Version: 1.6.7594.29634
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="robotdani">
+  <link name="base_link" />    
+  <joint name="dummy_base_link" type="fixed">
+    <parent link="base_link"/>
+    <child link="chasis"/>
+  </joint>
+  <link
+    name="chasis">
+    <inertial>
+      <origin
+        xyz="0.0102573593102757 3.90402320556236E-06 0.024306923509269"
+        rpy="0 0 0" />
+      <mass
+        value="0.508596589711015" />
+      <inertia
+        ixx="0.00186316321715101"
+        ixy="-1.82760326451473E-08"
+        ixz="-6.23007633769857E-07"
+        iyy="0.000874148042299219"
+        iyz="-4.08749627617853E-09"
+        izz="0.00266527809108481" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robotdani/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robotdani/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="RuedaDrc_Link">
+    <inertial>
+      <origin
+        xyz="3.3307E-16 -0.0127 -1.9654E-15"
+        rpy="0 0 0" />
+      <mass
+        value="0.087975" />
+      <inertia
+        ixx="7.2361E-05"
+        ixy="-7.2983E-19"
+        ixz="-5.5459E-11"
+        iyy="0.0001386"
+        iyz="4.6555E-19"
+        izz="7.2361E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robotdani/meshes/RuedaDrc_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robotdani/meshes/RuedaDrc_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="RuedaDrc_jt"
+    type="continuous">
+    <origin
+      xyz="0.030564 -0.17442 -0.015523"
+      rpy="0 0 0" />
+    <parent
+      link="chasis" />
+    <child
+      link="RuedaDrc_Link" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      effort="100"
+      velocity="100" />
+  </joint>
+  <link
+    name="RuedaIzq_Link">
+    <inertial>
+      <origin
+        xyz="-1.1935E-15 0.0127 -1.4259E-15"
+        rpy="0 0 0" />
+      <mass
+        value="0.087975" />
+      <inertia
+        ixx="7.2361E-05"
+        ixy="-7.2258E-19"
+        ixz="3.486E-11"
+        iyy="0.0001386"
+        iyz="5.3963E-19"
+        izz="7.2361E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robotdani/meshes/RuedaIzq_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robotdani/meshes/RuedaIzq_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="RuedaIzq_jt"
+    type="continuous">
+    <origin
+      xyz="0.030564 0.17443 -0.015523"
+      rpy="0 0 0" />
+    <parent
+      link="chasis" />
+    <child
+      link="RuedaIzq_Link" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      effort="100"
+      velocity="100" />
+  </joint>
+  <link
+    name="RuedaTrs_Link">
+    <inertial>
+      <origin
+        xyz="8.2366E-07 -0.0029061 2.0308E-07"
+        rpy="0 0 0" />
+      <mass
+        value="0.080623" />
+      <inertia
+        ixx="1.32E-05"
+        ixy="1.2399E-11"
+        ixz="-8.5339E-10"
+        iyy="2.5552E-05"
+        iyz="-6.4165E-10"
+        izz="1.3244E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robotdani/meshes/RuedaTrs_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robotdani/meshes/RuedaTrs_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="RuedaTrs_jt"
+    type="continuous">
+    <origin
+      xyz="-0.16437 0.002679 -0.016368"
+      rpy="0 0 0" />
+    <parent
+      link="chasis" />
+    <child
+      link="RuedaTrs_Link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      effort="100"
+      velocity="100" />
+  </joint>
+</robot>
