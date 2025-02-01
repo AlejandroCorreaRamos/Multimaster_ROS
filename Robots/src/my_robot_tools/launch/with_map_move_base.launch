@@ -1,0 +1,40 @@
+<launch>
+
+<arg name="robot_id" default="$(env ROBOT_ID)" />
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base"> <!--output="screen"-->
+    
+    <rosparam file="$(find my_robot_tools)/params/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find my_robot_tools)/params/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find my_robot_tools)/params/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find my_robot_tools)/params/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find my_robot_tools)/params/base_local_planner_params.yaml" command="load" />
+  
+    <rosparam file="$(find my_robot_tools)/params/move_base_params.yaml" command="load" />
+    
+    <param name="base_global_planner" type="string" value="navfn/NavfnROS" />
+    <param name="base_local_planner" value="base_local_planner/TrajectoryPlannerROS"/>
+
+  </node>
+
+	<node pkg="outdoor_waypoint_nav" type="gps_waypoint" name="gps_waypoint" output="screen" ns="robot$(arg robot_id)" />
+		<param name="/outdoor_waypoint_nav/coordinates_file" value="/waypoint_files/points_outdoor.txt" type="string" />
+
+  <node pkg="server_bridge" type="cancel.py" name="cancel" output="screen" ns="robot$(arg robot_id)" />
+
+  <node pkg="topic_tools" type="relay" name="relay_node_$(arg robot_id)" args="/fix /robot$(arg robot_id)/gps" />
+
+  <arg name="robot_hosts_list" default="['192.168.43.78', '192.168.43.142']"/>
+  <node pkg="fkie_master_discovery" type="master_discovery" name="master_discovery1" output="screen">
+    <param name="log_level" value="DEBUG"/>
+    <param name="send_mcast" value="False"/>
+    <param name="listen_mcast" value="False"/>
+    <rosparam param="robot_hosts" subst_value="True">$(arg robot_hosts_list)</rosparam>
+  </node>
+
+  <node pkg="fkie_master_sync" type="master_sync" name="master_sync" output="screen">
+    <param name="ignore_nodes" value="['/GPS_broadcaster','/Lidar_broadcaster','/arduino','/ekf_localization','/ekf_localization_with_gps','/imuR_broadcaster','/joint_state_publisher','/map_server','/master_discovery','/master_sync','/move_base','/navsat_transform_node','/nmea_serial_driver_node','/robot_state_publisher','/ros_imu_bno055_node','/rosout','/rplidarNode']"/>
+    <param name="ignore_topics" value="['/odom*','/rosout','/rosout_agg','/scan','/set_pose','/time_reference','/vel','/map_metadata','/tf*','/cmd_vel','/diagnostics','/fix','/gps/filtered','/heading','/imu/data','/joint_states','/map','/move_base*','/outdoor_waypoint_nav*']"/>
+  </node>
+
+</launch>

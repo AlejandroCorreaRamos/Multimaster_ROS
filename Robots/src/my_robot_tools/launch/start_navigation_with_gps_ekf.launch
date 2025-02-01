@@ -1,0 +1,6 @@
+<launch>
+  <include file="$(find my_robot_tools)/launch/start_map_server.launch" />
+
+  <include file="$(find my_robot_tools)/launch/with_map_move_base.launch" />
+
+</launch>

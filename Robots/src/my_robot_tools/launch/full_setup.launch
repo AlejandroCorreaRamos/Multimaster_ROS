@@ -1,0 +1,10 @@
+<launch>
+
+<include file="$(find my_robot_tools)/launch/full_hw_test.launch" />
+
+<include file="$(find my_robot_tools)/launch/full_odometry.launch" />
+
+<include file="$(find my_robot_tools)/launch/start_navigation_with_gps_ekf.launch" />
+
+</launch>
+

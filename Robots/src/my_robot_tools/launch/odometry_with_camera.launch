@@ -1,0 +1,45 @@
+<launch>
+
+    <!-- Run the EKF Localization node -->
+    
+    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization_camera">
+        <remap from="/odometry/filtered" to="/odometry/filtered/local"/>
+        <rosparam command="load" file="$(find my_robot_tools)/config/local_ekf_localization.yaml"/>
+
+    </node>
+
+
+    <!-- Run the ekf for map to odom config -->
+
+    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localizatiion_gps_cam">
+        <remap from="/odometry/filtered" to="/odometry/filtered/global"/>
+        <rosparam command="load" file="$(find my_robot_tools)/config/gps_localization_config.yaml" />
+    </node>
+
+    <node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform_node" respawn="true">
+
+      <param name="frequency" value="7"/>
+      <param name="delay" value="3"/>
+
+
+      <param name="magnetic_declination_radians" value="0,11"/>
+      <param name="yaw_offset" value="0.0"/>
+      <param name="zero_altitude" value="true"/>
+
+
+      <param name="broadcast_cartesian_transform" value="true"/>
+      <param name="publish_filtered_gps" value="true"/>
+
+
+      <param name="use_odometry_yaw" value="false"/>
+      <param name="wait_for_datum" value="false"/>
+    
+
+      <remap from="/imu/data" to="/imu/data" />
+      <remap from="/gps/fix" to="/fix" />
+      <remap from="/odometry/filtered" to="/odometry/filtered/global" />
+
+    </node>
+
+
+</launch>

@@ -1,0 +1,93 @@
+<launch>
+
+<!--A continuación se realiza un llamado al archivo de configuración para ejecutar el Arduino UNO-->
+
+   <node name="arduino" pkg="ros_arduino_python" type="arduino_node.py" output="screen">
+      <rosparam file="$(find ros_arduino_python)/config/my_arduino_params.yaml" command="load" />
+   </node>
+
+
+<!--Seguido se definen los parámetros generales sobre la IMU BNO055-->
+
+    <arg name="operation_mode" default="NDOF"/>
+    <arg name="oscillator" default="INTERNAL" />
+    <arg name="reset_orientation" default="true" />
+    <arg name="frequency" default="50" /> 
+    <arg name="use_magnetometer" default="false" />
+    <arg name="use_temperature" default="false" /> 
+
+
+    <node pkg="ros_imu_bno055" type="imu_ros.py" name="ros_imu_bno055_node" output="screen">
+        <param name="serial_port" value="/dev/IMU" /> <!--Este parámetro debe ser tenido en cuenta, de acuerdo con el puerto que se asigne por el Sistema operativo-->
+        <param name="frame_id" value="imu_link" />
+        <param name="operation_mode" value="$(arg operation_mode)" />
+        <param name="oscillator" value="$(arg oscillator)" />
+        <param name="reset_orientation" value = "$(arg reset_orientation)" />
+        <param name="frequency" value="$(arg frequency)" />
+        <param name="use_magnetometer" value="$(arg use_magnetometer)" />    
+        <param name="use_temperature" value="$(arg use_temperature)" />    
+    </node>
+
+
+  <node pkg="tf2_ros" type="static_transform_publisher" name="imuR_broadcaster" args="-0.15 -0.1 0.15 0 0 0 base_link imu_link"/>
+
+
+<!--Se esta sección se definen los parámetros generales sobre el GPS que se utilizará-->
+
+  <arg name="port" default="/dev/GPS" /> <!--Se establece en este parámetro el puerto que se asigne al GPS que se usará-->
+  <arg name="baud" default="4800" />         <!--En este parámetro se establecen los baudios con los que trabaja el GPS-->
+  <arg name="frame_id" default="gps" />
+  <arg name="use_GNSS_time" default="False" />
+  <arg name="time_ref_source" default="gps" />
+  <arg name="useRMC" default="false" />
+
+  <node name="nmea_serial_driver_node" pkg="nmea_navsat_driver" type="nmea_serial_driver" output="screen">
+    <param name="port" value="$(arg port)"/>
+    <param name="baud" value="$(arg baud)" />
+    <param name="frame_id" value="$(arg frame_id)" />
+    <param name="use_GNSS_time" value="$(arg use_GNSS_time)" />
+    <param name="time_ref_source" value="$(arg time_ref_source)" />
+    <param name="useRMC" value="$(arg useRMC)" />
+  </node>
+
+  <node pkg="tf2_ros" type="static_transform_publisher" name="GPS_broadcaster" args="0 0 0 0 0 0 base_link gps"/>
+
+
+<!--A continuación se presentan los parámetros necesarios para el lanzamiento del LiDAR-->
+
+  <node name="rplidarNode"          pkg="rplidar_ros"  type="rplidarNode" output="screen">
+  <param name="serial_port"         type="string" value="/dev/LiDAR"/> <!--En este espacio se asigna el puerto que reconoció el sistema para el LiDAR--> 
+  <param name="serial_baudrate"     type="int"    value="256000"/><!--A3 -->
+  <param name="frame_id"            type="string" value="laser"/>
+  <param name="inverted"            type="bool"   value="false"/>
+  <param name="angle_compensate"    type="bool"   value="true"/>
+  <param name="scan_mode"           type="string" value="Stability"/>
+  </node>
+
+  <node pkg="tf2_ros" type="static_transform_publisher" name="Lidar_broadcaster" args="0.02 0 0 0 0 0 base_link laser"/>
+
+
+<!--Finalmente se lanza el modelo del robot y el RVIZ-->
+  <arg
+    name="model" />
+  <param
+    name="robot_description"
+    textfile="$(find robotdani)/urdf/robotdani.urdf" />
+  <node
+    name="joint_state_publisher"
+    pkg="joint_state_publisher"
+    type="joint_state_publisher" >
+	<param name="rate" value="50" />
+  </node>
+  <node
+    name="robot_state_publisher"
+    pkg="robot_state_publisher"
+    type="robot_state_publisher" >
+	<param name="publish_frequency " value="50" />
+   </node>
+  <node
+    name="rviz"
+    pkg="rviz"
+    type="rviz"
+    args="-d $(find robotdani)/navigation.rviz" />
+</launch>
