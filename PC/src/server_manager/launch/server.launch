@@ -1,0 +1,19 @@
+<launch>
+    <arg name="robot_hosts_list" default="['user-desktop', 'jetson']"/>
+  <node pkg="fkie_master_discovery" type="master_discovery" name="master_discovery2" output="screen">
+    <param name="log_level" value="DEBUG"/>
+    <param name="send_mcast" value="False"/>
+    <param name="listen_mcast" value="False"/>
+    <rosparam param="robot_hosts" subst_value="True">$(arg robot_hosts_list)</rosparam> 
+  </node>
+
+  <arg name="ignore_nodes_list" default="['/GPS_broadcaster','/Lidar_broadcaster','/arduino','/ekf_localization','/ekf_localization_with_gps','/imuR_broadcaster','/joint_state_publisher','/map_server','/master_discovery','/master_sync','/move_base','/navsat_transform_node','/nmea_serial_driver_node','/robot_state_publisher','/ros_imu_bno055_node','/rosout','/rplidarNode']"/>
+  <arg name="ignore_topics_list" default="['/odom*','/rosout','/rosout_agg','/scan','/set_pose','/time_reference','/vel','/map_metadata','/tf*','/cmd_vel','/diagnostics','/fix','/gps/filtered','/heading','/imu/data','/joint_states','/map','/move_base*','/outdoor_waypoint_nav*']"/>
+  <node pkg="fkie_master_sync" type="master_sync" name="master_sync" output="screen">
+    <rosparam param="ignore_nodes" subst_value="True">$(arg ignore_nodes_list)</rosparam> 
+    <rosparam param="ignore_topics" subst_value="True">$(arg ignore_topics_list)</rosparam> 
+  </node>
+
+  <node pkg="server_manager" type="manager.py" name="server_manager" output="screen" />
+
+</launch>
